@@ -167,15 +167,20 @@ abstract class GenericModel
     return $this->saved;
   }
   
-  private function setup($hash = array())
+  private function only_in_fields($key)
   {
     $klass = get_called_class();
     $fields = $klass::$fields;
     
+    return !(in_array($key, $fields) || $key == "id");
+  }
+  
+  private function setup($hash = array())
+  {
+    $hash = array_filter($hash, array(&$this, "only_in_fields"));
+    
     foreach ($hash as $key => $value) {
-      if (in_array($key, $fields) || $key == "id") {
-        $this->values[$key] = $value;
-      }
+      $this->values[$key] = $value;
     }
     
     $this->changed = array_unique(array_merge($this->changed, $hash));
