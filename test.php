@@ -59,6 +59,7 @@ print_r(Cart::get(8));
 $item = CartItem::first();
 print_r($item);
 print_r($item->attributes());
+echo "woo";
 print_r($item->cart());
 
 

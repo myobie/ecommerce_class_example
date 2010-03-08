@@ -203,6 +203,18 @@ abstract class GenericModel
     return $hash;
   }
   
+  public function has_many($model, $hash = array())
+  {
+    $hash = $this->has_many_where($hash);
+    return $model::all($hash);
+  }
+  
+  public function belongs_to($model)
+  {
+    $model_klass = ucfirst($model);
+    return $model::get($this->get_attribute($model."_id"));
+  }
+  
   
 }
 

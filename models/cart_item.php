@@ -2,7 +2,6 @@
 
 $dir = dirname(__FILE__);
 require_once "$dir/../generic/model.php";
-require_once "cart.php";
 
 class CartItem extends GenericModel
 {
@@ -21,7 +20,7 @@ class CartItem extends GenericModel
   
   function cart()
   {
-    return Cart::get($this->get_attribute("cart_id"));
+    return $this->belongs_to("cart");
   }
 }
 
