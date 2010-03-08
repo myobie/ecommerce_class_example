@@ -169,8 +169,13 @@ abstract class GenericModel
   
   private function setup($hash = array())
   {
+    $klass = get_called_class();
+    $fields = $klass::$fields;
+    
     foreach ($hash as $key => $value) {
-      $this->values[$key] = $value;
+      if (in_array($key, $fields) || $key == "id") {
+        $this->values[$key] = $value;
+      }
     }
     
     $this->changed = array_unique(array_merge($this->changed, $hash));
