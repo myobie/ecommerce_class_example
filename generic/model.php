@@ -2,14 +2,18 @@
 
 require_once "db.php";
 
-class GenericModel
+abstract class GenericModel
 {
   
   public static $table_name = "";
+  public static $foreign_key = "";
   public static $fields = array();
   private static $mass_assign = array();
+  private $original_values = array();
   private $values = array();
+  private $changed = array();
   private $saved = false;
+  private $persisted = false;
   
   function __construct($hash = array())
   {
@@ -46,7 +50,10 @@ class GenericModel
     foreach ($result as $record) {
       $model = new $klass;
       $model->setup($record);
-      $model->mark_as_saved();
+      $model->saved = true;
+      $model->persisted = true;
+      $model->original_values = $model->values;
+      $model->changed = array();
       array_push($models, $model);
     }
     
@@ -69,24 +76,90 @@ class GenericModel
     }
   }
   
-  private static function query($string)
+  public static function get($id)
   {
+    $klass = get_called_class();
     
+    $hash = array("where" => array("id = ?", $id));
+    
+    $result = $klass::first($hash);
+    
+    return $result;
+  }
+  
+  public function id()
+  {
+    return $this->original_values["id"];
   }
   
   public function save()
   {
+    global $db;
+    $klass = get_called_class();
     
+    if ($this->persisted)
+    {
+      // update
+      $success = $db->update_row($klass::$table_name, $this->id(), $this->changed);
+    } else {
+      // insert
+      $success = $db->insert_row($klass::$table_name, $this->changed);
+      $this->values["id"] = $success;
+    }
+    
+    if ($success)
+    {
+      $this->saved = true;
+      $this->persisted = true;
+      $this->changed = array();
+      $model->original_values = $model->values;
+    }
+    
+    return !!$success;
   }
   
   public function update($hash = array())
   {
+    $this->setup($hash);
+    return $this;
+  }
+  
+  public function destroy()
+  {
+    global $db;
+    $klass = get_called_class();
     
+    if ($this->persisted)
+    {
+      $success = $db->delete_row($klass::$table_name, $this->id());
+    } else {
+      return false;
+    }
+    
+    if ($success)
+    {
+      $this->saved = true;
+      $this->persisted = true;
+      $this->changed = array();
+      $model->original_values = $model->values;
+    }
+    
+    return !!$success;
   }
   
   public function attributes()
   {
     return $this->values;
+  }
+  
+  public function get_attribute($key)
+  {
+    return $this->values[$key];
+  }
+  
+  public function changed_attributes()
+  {
+    return $this->changed;
   }
   
   public function saved()
@@ -100,12 +173,34 @@ class GenericModel
       $this->values[$key] = $value;
     }
     
+    $this->changed = array_unique(array_merge($this->changed, $hash));
+    
     $this->saved = false;
   }
   
-  private function mark_as_saved()
+  public function has_many_where($hash = array())
   {
-    $this->saved = true;
+    $klass = get_called_class();
+    $key = $klass::$foreign_key;
+    
+    if (empty($hash["where"]))
+    {
+      
+      $hash["where"] = array("$key = ?", $this->id());
+      
+    } else {
+      
+      if (gettype($hash["where"]) == "array")
+      {
+        $hash["where"][0] = "(" . $hash["where"][0] . ") AND $key = ?";
+        array_push($hash["where"], $this->id());
+      } else {
+        $hash["where"] = array("(" . $hash["where"] . ") AND $key = ?", $this->id());
+      }
+      
+    }
+    
+    return $hash;
   }
   
   

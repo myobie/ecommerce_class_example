@@ -36,29 +36,93 @@ class DB
     
     $query .= $this->options_to_query($hash);
     
-    print_r($query);
-    echo "\n\n";
-    
     return $this->query_rows($query);
   }
   
   public function update($hash = array())
   {
+    $table = mysql_real_escape_string($hash["table"]);
+    $query = "UPDATE $table SET ";
     
+    foreach ($hash["values"] as $column => $value) {
+      $column = mysql_real_escape_string($column);
+      $value = mysql_real_escape_string($value);
+      $query .= "$column = '$value', ";
+    }
+    $query = rtrim($query, " ,") . " ";
+    
+    $query .= $this->options_to_query($hash);
+    
+    $result = $this->query($query);
+    
+    return $result;
+  }
+  
+  public function update_row($table, $id, $values)
+  {
+    return $this->update(array(
+      "table" => $table,
+      "values" => $values,
+      "where" => array("id = ?", $id),
+      "limit" => 1
+    ));
   }
   
   public function insert($hash = array())
   {
+    $table = mysql_real_escape_string($hash["table"]);
+    $query = "INSERT INTO $table SET ";
     
+    foreach ($hash["values"] as $column => $value) {
+      $column = mysql_real_escape_string($column);
+      $value = mysql_real_escape_string($value);
+      $query .= "$column = '$value', ";
+    }
+    $query = rtrim($query, " ,") . " ";
+    
+    $query .= $this->options_to_query($hash);
+    
+    $result = $this->query($query);
+    
+    if ($result)
+      $result = mysql_insert_id();
+    
+    return $result;
+  }
+  
+  public function insert_row($table, $values)
+  {
+    return $this->insert(array(
+      "table" => $table,
+      "values" => $values
+    ));
   }
   
   public function delete($hash = array())
   {
+    $table = mysql_real_escape_string($hash["table"]);
+    $query = "DELETE FROM $table ";
     
+    $query .= $this->options_to_query($hash);
+    
+    $result = $this->query($query);
+    
+    return $result;
+  }
+  
+  public function delete_row($table, $id)
+  {
+    return $this->delete(array(
+      "table" => $table,
+      "where" => array("id = ?", $id)
+    ));
   }
   
   public function query($string)
   {
+    echo $string;
+    echo "\n\n";
+    
     return mysql_query($string);
   }
   
@@ -118,7 +182,7 @@ class DB
     if (! empty($hash["where"]))
     {
       $where = $this->where_substitutions($hash["where"]);
-      $query .= "WHERE $where";
+      $query .= "WHERE $where ";
     }
     
     if (! empty($hash["order"]))
