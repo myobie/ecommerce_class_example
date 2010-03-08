@@ -17,6 +17,16 @@ class Category extends GenericModel
     parent::__construct($hash);
   }
   
+  function products()
+  {
+    return Product::all(array(
+      "where" => array(
+        "id IN (SELECT product_id FROM categorizations WHERE category_id = ?)", 
+        $this->id()
+      )
+    ));
+  }
+  
 }
 
 ?>

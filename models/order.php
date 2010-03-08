@@ -29,6 +29,16 @@ class Order extends GenericModel
     parent::__construct($hash);
   }
   
+  function user()
+  {
+    return $this->belongs_to("User");
+  }
+  
+  function order_items($hash = array())
+  {
+    return $this->has_many("OrderItem", $hash);
+  }
+  
 }
 
 ?>

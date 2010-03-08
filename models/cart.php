@@ -22,6 +22,11 @@ class Cart extends GenericModel
     return $this->has_many("CartItem", $hash);
   }
   
+  function user()
+  {
+    return $this->belongs_to("User");
+  }
+  
 }
 
 ?>

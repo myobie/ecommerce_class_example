@@ -64,4 +64,9 @@ print_r($item->cart());
 
 
 
+$product = Product::first();
+print_r($product);
+print_r($product->categories());
+
+
 ?>

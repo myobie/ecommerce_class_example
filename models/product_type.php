@@ -3,11 +3,11 @@
 $dir = dirname(__FILE__);
 require_once "$dir/../generic/model.php";
 
-class Collection extends GenericModel
+class ProductType extends GenericModel
 {
   
-  public static $table_name = "collections";
-  public static $foreign_key = "collection_id";
+  public static $table_name = "product_type";
+  public static $foreign_key = "product_type_id";
   public static $fields = array(
     "name"
   );
@@ -17,7 +17,7 @@ class Collection extends GenericModel
     parent::__construct($hash);
   }
   
-  function products($hash = array())
+  function product($hash = array())
   {
     return $this->has_many("Product", $hash);
   }

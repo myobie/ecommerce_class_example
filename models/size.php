@@ -3,30 +3,19 @@
 $dir = dirname(__FILE__);
 require_once "$dir/../generic/model.php";
 
-class Color extends GenericModel
+class Size extends GenericModel
 {
   
-  public static $table_name = "colors";
-  public static $foreign_key = "color_id";
+  public static $table_name = "sizes";
+  public static $foreign_key = "size_id";
   public static $fields = array(
     "name",
-    "r",
-    "g",
-    "b",
-    "c",
-    "m",
-    "y",
-    "k"
+    "short_name"
   );
   
   function __construct($hash = array())
   {
     parent::__construct($hash);
-  }
-  
-  function photos($hash = array())
-  {
-    return $this->has_many("Photo", $hash);
   }
   
   function variants($hash = array())

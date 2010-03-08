@@ -20,7 +20,12 @@ class CartItem extends GenericModel
   
   function cart()
   {
-    return $this->belongs_to("cart");
+    return $this->belongs_to("Cart");
+  }
+  
+  function variant()
+  {
+    return $this->belongs_to("Variant");
   }
 }
 

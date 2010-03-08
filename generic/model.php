@@ -211,8 +211,8 @@ abstract class GenericModel
   
   public function belongs_to($model)
   {
-    $model_klass = ucfirst($model);
-    return $model::get($this->get_attribute($model."_id"));
+    $key = lcfirst($model);
+    return $model::get($this->get_attribute($key."_id"));
   }
   
   
