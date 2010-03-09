@@ -22,7 +22,7 @@ include "app/includes/header.php";
         <?= $product->g("name") ?> - <?= implode(", ", $product->category_names()) ?>
       </span>
       
-      <img src="#" width="300" height="300" class="product_photo">
+      <img src="<?= $product->photo()->url("medium") ?>" width="300" height="300" class="product_photo">
     
       <form action="/cart/add.php" method="post">
         <input type="hidden" name="product_id" value="<?= $product->id() ?>">

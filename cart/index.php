@@ -28,11 +28,12 @@ include "../app/includes/header.php";
     <tbody>
       <? foreach ($cart_items as $cart_item) { ?>
         <? $variant = $cart_item->variant() ?>
+        <? $color = $variant->color() ?>
         <? $product = $variant ->product() ?>
         <tr id="cart_item_<?= $cart_item->id() ?>">
           
           <td class="photo">
-            <img src="#" width="30" height="30">
+            <img src="<?= $product->photo($color->id())->url("small") ?>" width="30" height="30">
           </td>
           <td>
             <?= $product->g("name") ?> 

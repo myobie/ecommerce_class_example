@@ -49,34 +49,45 @@ class Photo extends GenericModel
   function path($type = "default")
   {
     $dir = dirname(__FILE__);
-    $base_path = "$dir/../../images/uploads/";
-    return $base_path . $this->id() . "/$type" . "/" . $this->g("file_name");
+    $base_path = realpath("$dir/../../images/uploads");
+    $folder = $base_path . "/" . $this->id() . "/$type" . "/";
+    return $folder . $this->g("file_name");
   }
   
   function before_save()
   {
-    // move tmpfile into place
-    
     $attributes = $this->attributes();
     
     if (! empty($attributes["tmpfile"]))
     {
-      if (empty($attributes["file_name"]))
-        $this->update(array("file_name" => basename($attributes["tmpfile"]["name"])));
-        
-      move_uploaded_file($attributes["tmpfile"]["tmp_name"], $this->path());
+      if (empty($attributes["file_name"])) {
+        $name = basename($attributes["tmpfile"]["name"]);
+        $name = preg_replace("/[^a-zA-Z0-9-_.]/", "-", $name);
+        $name = preg_replace("/[-]{2,}/", "-", $name);
+        $this->update(array("file_name" => $name));
+      }
     }
   }
   
   function after_save()
   {
-    // generate thumbnails
-    
     $attributes = $this->attributes();
     
     if (! empty($attributes["tmpfile"]))
     {
+      mkdir(dirname($this->path()), 0755, true);
+      move_uploaded_file($attributes["tmpfile"]["tmp_name"], $this->path());
       
+      foreach (self::$sizes as $name => $geometry) {
+        mkdir(dirname($this->path($name)), 0755, true);
+        
+        $convert = "/usr/local/bin/convert " . $this->path() . 
+                   " -resize \"$geometry\" " . $this->path($name);
+        shell_exec($convert);
+        
+        $chmod = "chmod 755 " . $this->path($name);
+        shell_exec($chmod);
+      }
     }
   }
   

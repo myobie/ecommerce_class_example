@@ -40,9 +40,15 @@ class Product extends GenericModel
     return $this->has_many("Photo", $hash);
   }
   
-  function photo()
+  function photo($color_id = null)
   {
-    $photos = $this->photos(array("limit" => 1));
+    $conditions = array("limit" => 1);
+    
+    if ($color_id)
+      $conditions["where"] = array("color_id = ?", $color_id);
+    
+    $photos = $this->photos($conditions);
+    
     if (! empty($photos))
     {
       return $photos[0];
