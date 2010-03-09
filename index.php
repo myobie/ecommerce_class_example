@@ -9,6 +9,7 @@ $cart = find_or_create_cart();
 $products = Product::all(array("order" => "name ASC"));
 $sizes = Size::all(array("order" => "id ASC"));
 $colors = Color::all(array("order" => "name ASC"));
+$first_color_id = $colors[0]->id(); // make sure the images line up with the select box
 
 include "app/includes/header.php";
 
@@ -22,7 +23,7 @@ include "app/includes/header.php";
         <?= $product->g("name") ?> - <?= implode(", ", $product->category_names()) ?>
       </span>
       
-      <img src="<?= $product->photo()->url("medium") ?>" width="300" height="300" class="product_photo">
+      <img src="<?= $product->photo($first_color_id)->url("medium") ?>" width="300" height="300" class="product_photo">
     
       <form action="/cart/add.php" method="post">
         <input type="hidden" name="product_id" value="<?= $product->id() ?>">
