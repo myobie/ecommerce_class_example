@@ -80,6 +80,18 @@ class Product extends GenericModel
     return $result;
   }
   
+  function category_ids()
+  {
+    $cats = $this->categories();
+    $result = array();
+    
+    foreach ($cats as $cat) {
+      array_push($result, $cat->id());
+    }
+    
+    return $result;
+  }
+  
 }
 
 ?>

@@ -116,6 +116,27 @@ abstract class GenericModel
     }
   }
   
+  public static function delete($hash = array())
+  {
+    global $db;
+    $klass = get_called_class();
+    
+    $hash = array_merge($hash, array("table" => $klass::$table_name));
+    
+    $db->delete($hash);
+    
+    return $success;
+  }
+  
+  public static function delete_ids($ids = array())
+  {
+    $klass = get_called_class();
+    
+    $klass::delete(array(
+      "where" => array("id IN (?)", implode(",", $ids))
+    ));
+  }
+  
   public function id()
   {
     return $this->original_values["id"];
