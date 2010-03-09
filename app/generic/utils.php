@@ -22,5 +22,22 @@
    $func = create_function('$c', 'return strtoupper($c[1]);');
    return preg_replace_callback('/_([a-z])/', $func, $str);
  }
+ 
+ 
+ $cycle_hash = array();
+ function cycle($what = array(), $id = "default")
+ {
+   global $cycle_hash;
+   
+   if (! $cycle_hash[$id])
+     $cycle_hash[$id] = array("values" => $what, "current" => -1);
+   
+   $cycle_hash[$id]["current"] += 1;
+   
+   if ($cycle_hash[$id]["current"] >= count($cycle_hash[$id]["values"]))
+     $cycle_hash[$id]["current"] = 0;
+   
+   return $cycle_hash[$id]["values"][$cycle_hash[$id]["current"]];
+ }
 
 ?>
