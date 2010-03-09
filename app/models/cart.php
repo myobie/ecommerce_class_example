@@ -32,6 +32,17 @@ class Cart extends GenericModel
     return array_reduce($this->cart_items(), $func, 0);
   }
   
+  function total()
+  {
+    $func = create_function('$sum, $i', 'return $sum += $i->subtotal();');
+    return array_reduce($this->cart_items(), $func, 0);
+  }
+  
+  function total_formatted()
+  {
+    return "$" . number_format($this->total(), 2, ".", ",");
+  }
+  
   function add($variant)
   {
     $cart_item = $this->cart_items(array("where" => array("variant_id = ?", $variant->id())));

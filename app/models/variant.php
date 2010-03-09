@@ -51,6 +51,15 @@ class Variant extends GenericModel
     return "$" . number_format($this->price(), 2, ".", ",");
   }
   
+  function description()
+  {
+    $name = $this->product()->g("name");
+    $color = $this->color()->g("name");
+    $size = $this->size()->g("name");
+    
+    return "$name <span>($color &amp; $size)</span>";
+  }
+  
 }
 
 ?>

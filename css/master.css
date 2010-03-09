@@ -60,8 +60,43 @@ h1 {
 #minicart {
   position: absolute;
   right: 10px;
-  top: 25px;
+  top: 20px;
   text-align: right;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid transparent;
+}
+
+#minicart .summary {
+  display: none;
+}
+
+#minicart .summary table {
+  list-style-type: none;
+  margin: 10px 0 0;
+  padding: 0;
+  line-height: 14px;
+}
+
+#minicart .summary table td {
+  padding: 7px;
+  font-size: 14px;
+  border-top: 1px solid #eee;
+  color: #666;
+}
+
+#minicart .summary table td.quantity {
+  font-size: 18px;
+  font-weight: bold;
+  color: #999;
+}
+
+#minicart:hover {
+  border: 1px dotted #ccc;
+}
+
+#minicart:hover .summary {
+  display: block;
 }
 
 #minicart h2 {
@@ -133,4 +168,11 @@ h1 {
 #cart table td.photo img {
   display: block;
   margin: 0 auto;
+}
+
+#cart p.total {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+  margin: -2em 0 0; /* hacky */
 }

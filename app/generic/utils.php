@@ -39,5 +39,14 @@
    
    return $cycle_hash[$id]["values"][$cycle_hash[$id]["current"]];
  }
+ 
+ 
+ function pluralize($amount, $word)
+ {
+   if ($amount != 1)
+     $word .= "s";
+   
+   return "$amount $word";
+ }
 
 ?>

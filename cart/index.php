@@ -14,7 +14,7 @@ include "../app/includes/header.php";
 <? if (count($cart_items) > 0) { ?>
   
   <h2>Your Cart</h2>
-
+  
   <form action="/cart/update.php" method="post" id="cart">
     <table cellpadding="0" cellspacing="0" border="0">
       <thead>
@@ -31,16 +31,13 @@ include "../app/includes/header.php";
         <? foreach ($cart_items as $cart_item) { ?>
           <? $variant = $cart_item->variant() ?>
           <? $color = $variant->color() ?>
-          <? $product = $variant ->product() ?>
+          <? $product = $variant->product() ?>
           <tr id="cart_item_<?= $cart_item->id() ?>">
           
             <td class="photo">
               <img src="<?= $product->photo($color->id())->url("small") ?>" width="30" height="30">
             </td>
-            <td>
-              <?= $product->g("name") ?> 
-              (<?= $variant->color()->g("name") ?> - <?= $variant->size()->g("name") ?>)
-            </td>
+            <td class="description"><?= $variant->description() ?></td>
             <td class="quantity">
               <input type="text" 
                      name="cart_items[<?= $cart_item->id() ?>][quantity]" 
@@ -56,6 +53,8 @@ include "../app/includes/header.php";
     </table>
   
     <p><button type="submit">Update cart</button></p>
+    
+    <p class="total">Total: <?= $cart->total_formatted() ?></p>
   </form>
 
 <? } else { ?>
