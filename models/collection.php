@@ -7,9 +7,8 @@ class Collection extends GenericModel
 {
   
   public static $table_name = "collections";
-  public static $foreign_key = "collection_id";
   public static $fields = array(
-    "name"
+    "name" => "string"
   );
   
   function __construct($hash = array())

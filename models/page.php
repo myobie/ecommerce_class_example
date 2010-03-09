@@ -7,11 +7,10 @@ class Page extends GenericModel
 {
   
   public static $table_name = "pages";
-  public static $foreign_key = "page_id";
   public static $fields = array(
-    "slug",
-    "title",
-    "content"
+    "slug" => "string",
+    "title" => "string",
+    "content" => "text"
   );
   
   function __construct($hash = array())

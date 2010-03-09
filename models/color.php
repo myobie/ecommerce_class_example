@@ -7,16 +7,15 @@ class Color extends GenericModel
 {
   
   public static $table_name = "colors";
-  public static $foreign_key = "color_id";
   public static $fields = array(
-    "name",
-    "r",
-    "g",
-    "b",
-    "c",
-    "m",
-    "y",
-    "k"
+    "name" => "string",
+    "r" => "float",
+    "g" => "float",
+    "b" => "float",
+    "c" => "float",
+    "m" => "float",
+    "y" => "float",
+    "k" => "float"
   );
   
   function __construct($hash = array())

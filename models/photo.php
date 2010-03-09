@@ -7,11 +7,10 @@ class Photo extends GenericModel
 {
   
   public static $table_name = "photos";
-  public static $foreign_key = "photo_id";
   public static $fields = array(
-    "product_id",
-    "color_id",
-    "file_name"
+    "product_id" => "int",
+    "color_id" => "int",
+    "file_name" => "string"
   );
   
   function __construct($hash = array())

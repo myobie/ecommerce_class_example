@@ -7,13 +7,12 @@ class Product extends GenericModel
 {
   
   public static $table_name = "products";
-  public static $foreign_key = "product_id";
   public static $fields = array(
-    "product_type_id",
-    "collection_id",
-    "default_price",
-    "base_sku",
-    "name"
+    "product_type_id" => "int",
+    "collection_id" => "int",
+    "default_price" => "int",
+    "base_sku" => "string",
+    "name" => "string"
   );
   
   function __construct($hash = array())
@@ -21,10 +20,10 @@ class Product extends GenericModel
     parent::__construct($hash);
   }
   
-  // function product_type()
-  // {
-  //   return $this->belongs_to("ProductType");
-  // }
+  function product_type()
+  {
+    return $this->belongs_to("ProductType");
+  }
   
   function collection()
   {
@@ -47,8 +46,21 @@ class Product extends GenericModel
       "where" => array(
         "id IN (SELECT category_id FROM categorizations WHERE product_id = ?)", 
         $this->id()
-      )
+      ),
+      "order" => "name ASC"
     ));
+  }
+  
+  function category_names()
+  {
+    $cats = $this->categories();
+    $result = array();
+    
+    foreach ($cats as $cat) {
+      array_push($result, $cat->get_attribute("name"));
+    }
+    
+    return $result;
   }
   
 }

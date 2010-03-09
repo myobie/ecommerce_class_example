@@ -1,6 +1,7 @@
 <?
 
 require_once "db.php";
+require_once "utils.php";
 
 abstract class GenericModel
 {
@@ -27,7 +28,7 @@ abstract class GenericModel
     
     if (empty($hash["fields"]))
     {
-      $fields = $klass::$fields;
+      $fields = array_keys($klass::$fields);
     } else {
       $fields = $hash["fields"];
     }
@@ -87,6 +88,33 @@ abstract class GenericModel
     return $result;
   }
   
+  public static function random()
+  {
+    $klass = get_called_class();
+    
+    $result = $klass::first(array("order" => "RANDOM()"));
+    
+    return $result;
+  }
+  
+  public static function create($hash = array())
+  {
+    $klass = get_called_class();
+    $me = new $klass;
+    // print_r($hash);
+    $me->setup($hash);
+    // print_r($me->changed_attributes());
+    $success = $me->save();
+    // var_dump($success);
+    
+    if ($success)
+    {
+      return $me;
+    } else {
+      return $success;
+    }
+  }
+  
   public function id()
   {
     return $this->original_values["id"];
@@ -96,6 +124,8 @@ abstract class GenericModel
   {
     global $db;
     $klass = get_called_class();
+    
+    $this->before_save();
     
     if ($this->persisted)
     {
@@ -112,8 +142,10 @@ abstract class GenericModel
       $this->saved = true;
       $this->persisted = true;
       $this->changed = array();
-      $model->original_values = $model->values;
+      $this->original_values = $this->values;
     }
+    
+    $this->after_save();
     
     return !!$success;
   }
@@ -157,6 +189,11 @@ abstract class GenericModel
     return $this->values[$key];
   }
   
+  public function g($key)
+  {
+    return $this->get_attribute($key);
+  }
+  
   public function changed_attributes()
   {
     return $this->changed;
@@ -167,31 +204,28 @@ abstract class GenericModel
     return $this->saved;
   }
   
-  private function only_in_fields($key)
+  private function setup($hash = array())
   {
     $klass = get_called_class();
     $fields = $klass::$fields;
     
-    return !(in_array($key, $fields) || $key == "id");
-  }
-  
-  private function setup($hash = array())
-  {
-    $hash = array_filter($hash, array(&$this, "only_in_fields"));
+    $hash = array_intersect_key($hash, array_merge($fields, array("id" => "serial")));
     
     foreach ($hash as $key => $value) {
       $this->values[$key] = $value;
     }
     
-    $this->changed = array_unique(array_merge($this->changed, $hash));
+    $this->changed = array_merge($this->changed, $hash);
     
     $this->saved = false;
   }
   
+  // --- Relationships ---
+  
   public function has_many_where($hash = array())
   {
     $klass = get_called_class();
-    $key = $klass::$foreign_key;
+    $key = to_underscore($klass) . "_id";
     
     if (empty($hash["where"]))
     {
@@ -221,10 +255,14 @@ abstract class GenericModel
   
   public function belongs_to($model)
   {
-    $key = lcfirst($model);
+    $key = to_underscore($model);
     return $model::get($this->get_attribute($key."_id"));
   }
   
+  // --- Callbacks ---
+  
+  private function before_save() {}
+  private function after_save() {}
   
 }
 

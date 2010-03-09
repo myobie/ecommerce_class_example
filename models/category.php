@@ -7,9 +7,8 @@ class Category extends GenericModel
 {
   
   public static $table_name = "categories";
-  public static $foreign_key = "category_id";
   public static $fields = array(
-    "name"
+    "name" => "string"
   );
   
   function __construct($hash = array())

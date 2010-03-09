@@ -7,17 +7,16 @@ class User extends GenericModel
 {
   
   public static $table_name = "users";
-  public static $foreign_key = "user_id";
   public static $fields = array(
-    "first_name",
-    "last_name",
-    "email",
-    "address",
-    "city",
-    "state",
-    "postal_code",
-    "country",
-    "phone"
+    "first_name" => "string",
+    "last_name" => "string",
+    "email" => "string",
+    "address" => "string",
+    "city" => "string",
+    "state" => "string",
+    "postal_code" => "string",
+    "country" => "string",
+    "phone" => "string(25)"
   );
   
   function __construct($hash = array())

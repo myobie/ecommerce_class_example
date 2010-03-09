@@ -7,21 +7,20 @@ class Order extends GenericModel
 {
   
   public static $table_name = "orders";
-  public static $foreign_key = "order_id";
   public static $fields = array(
-    "user_id",
-    "total",
-    "shipping_total",
-    "tax_total",
-    "name",
-    "address",
-    "city",
-    "state",
-    "postal_code",
-    "country",
-    "phone",
-    "shipped_at",
-    "shipping_tracking_number"
+    "user_id" => "int",
+    "total" => "int",
+    "shipping_total" => "int",
+    "tax_total" => "int",
+    "name" => "string",
+    "address" => "string",
+    "city" => "string",
+    "state" => "string",
+    "postal_code" => "string",
+    "country" => "string",
+    "phone" => "string",
+    "shipped_at" => "datetime",
+    "shipping_tracking_number" => "string"
   );
   
   function __construct($hash = array())

@@ -7,17 +7,16 @@ class OrderItem extends GenericModel
 {
   
   public static $table_name = "order_items";
-  public static $foreign_key = "order_item_id";
   public static $fields = array(
-    "order_id",
-    "quantity",
-    "price_per_variant",
-    "name",
-    "color_id",
-    "size_id",
-    "photo_id",
-    "subtotal",
-    "variant_id"
+    "order_id" => "int",
+    "quantity" => "int",
+    "price_per_variant" => "int",
+    "name" => "string",
+    "color_id" => "int",
+    "size_id" => "int",
+    "photo_id" => "int",
+    "subtotal" => "int",
+    "variant_id" => "int"
   );
   
   function __construct($hash = array())

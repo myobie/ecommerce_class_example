@@ -8,9 +8,8 @@ class Categorization extends GenericModel
   
   public static $table_name = "categorizations";
   public static $fields = array(
-    "slug",
-    "title",
-    "content"
+    "product_id" => "int",
+    "category_id" => "int"
   );
   
   function __construct($hash = array())

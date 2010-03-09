@@ -7,9 +7,8 @@ class Cart extends GenericModel
 {
   
   public static $table_name = "carts";
-  public static $foreign_key = "cart_id";
   public static $fields = array(
-    "user_id"
+    "user_id" => "int"
   );
   
   function __construct($hash = array())

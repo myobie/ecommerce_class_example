@@ -7,14 +7,13 @@ class Variant extends GenericModel
 {
   
   public static $table_name = "variants";
-  public static $foreign_key = "variant_id";
   public static $fields = array(
-    "product_id",
-    "color_id",
-    "size_id",
-    "price",
-    "sku",
-    "quantity"
+    "product_id" => "int",
+    "color_id" => "int",
+    "size_id" => "int",
+    "price" => "int",
+    "sku" => "string",
+    "quantity" => "int"
   );
   
   function __construct($hash = array())

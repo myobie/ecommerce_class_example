@@ -6,10 +6,9 @@ require_once "$dir/../generic/model.php";
 class ProductType extends GenericModel
 {
   
-  public static $table_name = "product_type";
-  public static $foreign_key = "product_type_id";
+  public static $table_name = "product_types";
   public static $fields = array(
-    "name"
+    "name" => "string"
   );
   
   function __construct($hash = array())

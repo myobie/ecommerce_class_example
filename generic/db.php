@@ -120,8 +120,8 @@ class DB
   
   public function query($string)
   {
-    echo $string;
-    echo "\n\n";
+    // echo $string;
+    // echo "\n\n";
     
     return mysql_query($string);
   }

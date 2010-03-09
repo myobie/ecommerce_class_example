@@ -7,10 +7,9 @@ class Size extends GenericModel
 {
   
   public static $table_name = "sizes";
-  public static $foreign_key = "size_id";
   public static $fields = array(
-    "name",
-    "short_name"
+    "name" => "string",
+    "short_name" => "string(5)"
   );
   
   function __construct($hash = array())

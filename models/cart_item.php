@@ -8,9 +8,9 @@ class CartItem extends GenericModel
   
   public static $table_name = "cart_items";
   public static $fields = array(
-    "cart_id",
-    "quantity",
-    "variant_id"
+    "cart_id" => "int",
+    "quantity" => "int",
+    "variant_id" => "int"
   );
   
   function __construct($hash = array())
