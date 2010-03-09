@@ -16,7 +16,6 @@ $categories_to_remove = array();
 
 if (empty($_POST["product_categories"]))
 {
-  echo "Empty, removing all.";
   $categories_to_remove = $existing_category_ids;
 } else {
   
@@ -32,24 +31,24 @@ if (empty($_POST["product_categories"]))
   // only remove ones that are already there
   $categories_to_remove = array_intersect($categories_to_remove, $existing_category_ids);
   
-  if (! empty($categories_to_remove))
-  {
-    Categorization::delete(array(
-      "where" => array(
-        "product_id = ? AND category_id IN (?)", 
-        $product->id(),
-        implode(",", $categories_to_remove)
-      )
-    ));
+}
+
+if (! empty($categories_to_remove))
+{
+  Categorization::delete(array(
+    "where" => array(
+      "product_id = ? AND category_id IN (?)", 
+      $product->id(),
+      implode(",", $categories_to_remove)
+    )
+  ));
+}
+
+if (! empty($categories_to_add))
+{
+  foreach ($categories_to_add as $id) {
+    Categorization::create(array("product_id" => $product->id(), "category_id" => $id));
   }
-  
-  if (! empty($categories_to_add))
-  {
-    foreach ($categories_to_add as $id) {
-      Categorization::create(array("product_id" => $product->id(), "category_id" => $id));
-    }
-  }
-  
 }
 
 header('Location: /admin/products/');
