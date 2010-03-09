@@ -36,6 +36,21 @@ class Variant extends GenericModel
     return $this->belongs_to("Size");
   }
   
+  function price()
+  {
+    $price = $this->g("price");
+    
+    if (!$price)
+      $price = $this->product()->g("default_price");
+    
+    return $price / 100.0;
+  }
+  
+  function price_formatted()
+  {
+    return "$" . number_format($this->price(), 2, ".", ",");
+  }
+  
 }
 
 ?>

@@ -42,7 +42,14 @@ class DB
   public function update($hash = array())
   {
     $table = mysql_real_escape_string($hash["table"]);
-    $query = "UPDATE $table SET ";
+    $query = "UPDATE $table ";
+    
+    if (! empty($hash["values"]))
+    {
+      $query .= "SET ";
+    } else {
+      $query .= "VALUES() ";
+    }
     
     foreach ($hash["values"] as $column => $value) {
       $column = mysql_real_escape_string($column);
@@ -71,7 +78,14 @@ class DB
   public function insert($hash = array())
   {
     $table = mysql_real_escape_string($hash["table"]);
-    $query = "INSERT INTO $table SET ";
+    $query = "INSERT INTO $table ";
+    
+    if (! empty($hash["values"]))
+    {
+      $query .= "SET ";
+    } else {
+      $query .= "VALUES() ";
+    }
     
     foreach ($hash["values"] as $column => $value) {
       $column = mysql_real_escape_string($column);

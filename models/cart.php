@@ -26,6 +26,31 @@ class Cart extends GenericModel
     return $this->belongs_to("User");
   }
   
+  function quantity()
+  {
+    $func = create_function('$sum, $i', 'return $sum += $i->g("quantity");');
+    return array_reduce($this->cart_items(), $func, 0);
+  }
+  
+  function add($variant)
+  {
+    $cart_item = $this->cart_items(array("where" => array("variant_id = ?", $variant->id())));
+    
+    if (!$cart_item)
+    {
+      $cart_item = CartItem::create(array(
+        "cart_id" => $this->id(),
+        "quantity" => 1,
+        "variant_id" => $variant->id()
+      ));
+    } else {
+      $cart_item->update(array("quantity" => $cart_item->g("quantity") + 1));
+      $cart_item->save();
+    }
+    
+    return $cart_item;
+  }
+  
 }
 
 ?>

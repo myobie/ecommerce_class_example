@@ -27,6 +27,16 @@ class CartItem extends GenericModel
   {
     return $this->belongs_to("Variant");
   }
+  
+  function subtotal()
+  {
+    return $this->variant()->price() * $this->g("quantity");
+  }
+  
+  function subtotal_formatted()
+  {
+    return "$" . number_format($this->subtotal(), 2, ".", ",");
+  }
 }
 
 ?>
