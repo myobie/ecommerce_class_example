@@ -1,7 +1,7 @@
 <?
 
 $dir = dirname(__FILE__);
-require_once "$dir/generic/requires.php";
+require_once "$dir/app/requires.php";
 $db = new DB();
 
 $cart = find_or_create_cart();
@@ -10,18 +10,10 @@ $products = Product::all(array("order" => "name ASC"));
 $sizes = Size::all(array("order" => "name ASC"));
 $colors = Color::all();
 
-?><!DOCTYPE html>
-<html>
-  <head>
-    <title>My Store</title>
-  </head>
-  <body>
-    
-    <h1>My Store</h1>
-    
-    <h2>Cart Summary</h2>
-    <p><?= $cart->quantity() ?> items in your cart. <a href="/cart/">View your cart</a></p>
-    
+include "app/includes/header.php";
+
+?>
+
     <h2>Products</h2>
     <ul>
       <? foreach ($products as $product) { ?>
@@ -46,5 +38,4 @@ $colors = Color::all();
       <? } ?>
     </ul>
     
-  </body>
-</html>
+<? include "app/includes/footer.php" ?>

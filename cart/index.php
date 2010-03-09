@@ -1,20 +1,16 @@
 <?
 
 $dir = dirname(__FILE__);
-require_once "$dir/../generic/requires.php";
+require_once "$dir/../app/requires.php";
 $db = new DB();
 
 $cart = find_or_create_cart();
 $cart_items = $cart->cart_items();
 
-?><!DOCTYPE html>
-<html>
-  <head>
-    <title>Cart</title>
-  </head>
-  <body>
-    
-    <h1>Cart</h1>
+include "../app/includes/header.php";
+
+?>
+    <h2>Cart</h2>
     
     <form action="/cart/update.php" method="post">
       <table>
@@ -52,5 +48,4 @@ $cart_items = $cart->cart_items();
       <p><button type="submit">Update cart</button></p>
     </form>
     
-  </body>
-</html>
+<? include "../app/includes/footer.php"; ?>

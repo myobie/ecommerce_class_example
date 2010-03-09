@@ -1,7 +1,7 @@
 <?
 
 $dir = dirname(__FILE__);
-require_once "$dir/generic/requires.php";
+require_once "$dir/requires.php";
 
 $db = new DB();
 
