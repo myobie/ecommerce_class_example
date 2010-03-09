@@ -40,6 +40,17 @@ class Product extends GenericModel
     return $this->has_many("Photo", $hash);
   }
   
+  function photo()
+  {
+    $photos = $this->photos(array("limit" => 1));
+    if (! empty($photos))
+    {
+      return $photos[0];
+    } else {
+      return new Photo;
+    }
+  }
+  
   function categories()
   {
     return Category::all(array(

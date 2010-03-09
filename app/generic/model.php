@@ -9,6 +9,7 @@ abstract class GenericModel
   public static $table_name = "";
   public static $foreign_key = "";
   public static $fields = array();
+  public static $virtual_fields = array();
   private static $mass_assign = array();
   private $original_values = array();
   private $values = array();
@@ -179,6 +180,12 @@ abstract class GenericModel
     return !!$success;
   }
   
+  public function all_fields()
+  {
+    $klass = get_called_class();
+    return array_merge($klass::$fields, $klass::$virtual_fields, array("id" => "serial"));
+  }
+  
   public function attributes()
   {
     return $this->values;
@@ -204,18 +211,24 @@ abstract class GenericModel
     return $this->saved;
   }
   
+  public function persisted()
+  {
+    return $this->persisted;
+  }
+  
   private function setup($hash = array())
   {
     $klass = get_called_class();
-    $fields = $klass::$fields;
+    $all_fields = $this->all_fields();
     
-    $hash = array_intersect_key($hash, array_merge($fields, array("id" => "serial")));
+    $hash = array_intersect_key($hash, $all_fields);
     
     foreach ($hash as $key => $value) {
       $this->values[$key] = $value;
     }
     
-    $this->changed = array_merge($this->changed, $hash);
+    $this->changed = array_merge($this->changed, 
+                                 array_intersect_key($hash, $klass::$fields));
     
     $this->saved = false;
   }
@@ -261,8 +274,8 @@ abstract class GenericModel
   
   // --- Callbacks ---
   
-  private function before_save() {}
-  private function after_save() {}
+  function before_save() {}
+  function after_save() {}
   
 }
 
