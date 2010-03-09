@@ -58,14 +58,12 @@ class Photo extends GenericModel
   {
     $attributes = $this->attributes();
     
-    if (! empty($attributes["tmpfile"]))
+    if (!empty($attributes["tmpfile"]) && empty($attributes["file_name"]))
     {
-      if (empty($attributes["file_name"])) {
-        $name = basename($attributes["tmpfile"]["name"]);
-        $name = preg_replace("/[^a-zA-Z0-9-_.]/", "-", $name);
-        $name = preg_replace("/[-]{2,}/", "-", $name);
-        $this->update(array("file_name" => $name));
-      }
+      $name = basename($attributes["tmpfile"]["name"]);
+      $name = preg_replace("/[^a-zA-Z0-9-_.]/", "-", $name);
+      $name = preg_replace("/[-]{2,}/", "-", $name);
+      $this->update(array("file_name" => $name));
     }
   }
   
