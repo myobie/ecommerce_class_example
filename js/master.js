@@ -6,7 +6,7 @@ $(function() {
       var image_tag = $(this).parents("li").find("img.product_photo");
       
       $.get(
-        "/photos/image_tag.php", 
+        "/photos/image_tag.snippet.php", 
         { product_id:product_id, color_id:this.value },
         function(data) { $(image_tag).replaceWith(data); }
       );
