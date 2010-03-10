@@ -92,6 +92,17 @@ class Cart extends GenericModel
     return $cart_item;
   }
   
+  function after_destroy($success)
+  {
+    // clean up the cart items
+    
+    $cart_items = $this->cart_items();
+    
+    foreach ($cart_items as $cart_item) {
+      $cart_item->destroy();
+    }
+  }
+  
 }
 
 ?>

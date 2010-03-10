@@ -67,7 +67,7 @@ class Photo extends GenericModel
     }
   }
   
-  function after_save()
+  function after_save($success)
   {
     $attributes = $this->attributes();
     

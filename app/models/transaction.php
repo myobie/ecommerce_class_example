@@ -28,28 +28,29 @@ class Transaction
   
   public function capture()
   {
-    $this->card_type(); // cache the card type
-    
-    if ($this->is_valid())
+    if ($this->validate())
     {
       // TODO: actually hit the api to capture this transaction
       // TODO: also record the transaction error, if there is one
+      
+      return true;
+    } else {
+      return false;
     }
-    
-    return true;
   }
   
   public function authorize()
   {
-    $this->card_type(); // cache the card type
-    
-    if ($this->is_valid())
+    if ($this->validate())
     {
       // TODO: actually hit the api to authorize this transaction
       // TODO: also record the transaction error, if there is one
+      
       $this->key = "1234xyz";
+      return true;
+    } else {
+      return false;
     }
-    return true;
   }
   
   public function purchase()
@@ -81,18 +82,47 @@ class Transaction
     return $this->card_type;
   }
   
-  public function is_valid()
+  public function validate()
   {
     if (!$this->is_valid)
     {
-      $this->is_valid = $this->verify_presence() && $this->verify_date() && $this->verify_luhn();
+      $this->is_valid = true;
+      
+      if (! $this->verify_presence()) {
+        $this->is_valid = false;
+        $this->error_message = "Not all required credit card fields are filled in.";
+        return $this->is_valid;
+      }
+      
+      if (! $this->verify_known_card_type()) {
+        $this->is_valid = false;
+        $this->error_message = "Credit card doesn't appear to be one of the four types we accept or there is a typo.";
+        return $this->is_valid;
+      }
+      
+      if (! $this->verify_date()) {
+        $this->is_valid = false;
+        $this->error_message = "Credit card is out of date.";
+        return $this->is_valid;
+      }
+      
+      if (! $this->verify_luhn()) {
+        $this->is_valid = false;
+        $this->error_message = "Credit card number appears to have a typo.";
+        return $this->is_valid;
+      }
     }
     
     return $this->is_valid;
   }
   
-  private function verify_luhn()
+  function verify_known_card_type()
   {
+    return $this->card_type() != "other";
+  }
+  
+   function verify_luhn()
+   {
     // !!! this is the luhn algorithm
     // !!! I copied it from here: 
     //     http://blog.planzero.org/2009/08/luhn-modulus-implementation-php/
@@ -121,7 +151,7 @@ class Transaction
     return $total % 10 == 0;
   }
   
-  private function verify_date()
+   function verify_date()
   {
     $greater_month = (int)($this->info["month"]) >= (int)date("n");
     $greater_year = (int)($this->info["year"]) > (int)date("Y");
@@ -130,7 +160,7 @@ class Transaction
     return $greater_year || ($same_year && $greater_month);
   }
   
-  public function verify_presence()
+   function verify_presence()
   {
     return !empty($this->info["number"]) && !empty($this->info["security_code"]) && !empty($this->info["month"]) && !empty($this->info["year"]);
   }

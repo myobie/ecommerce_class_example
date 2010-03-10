@@ -167,7 +167,7 @@ abstract class GenericModel
       $this->original_values = $this->values;
     }
     
-    $this->after_save();
+    $this->after_save($success);
     
     return !!$success;
   }
@@ -183,6 +183,8 @@ abstract class GenericModel
     global $db;
     $klass = get_called_class();
     
+    $this->before_destroy();
+    
     if ($this->persisted)
     {
       $success = $db->delete_row($klass::$table_name, $this->id());
@@ -197,6 +199,8 @@ abstract class GenericModel
       $this->changed = array();
       $model->original_values = $model->values;
     }
+    
+    $this->after_destroy($success);
     
     return !!$success;
   }
@@ -301,7 +305,10 @@ abstract class GenericModel
   // --- Callbacks ---
   
   function before_save() {}
-  function after_save() {}
+  function after_save($success) {}
+  
+  function before_destroy() {}
+  function after_destroy($success) {}
   
 }
 
