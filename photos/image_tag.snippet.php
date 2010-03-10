@@ -12,5 +12,8 @@ $photo = Photo::first(array(
   )
 ));
 
+if (!$photo)
+  $photo = new Photo(); // for the blank image
+
 ?>
 <img src="<?= $photo->url("medium") ?>" width="300" height="300" class="product_photo">
