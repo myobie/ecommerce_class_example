@@ -54,7 +54,7 @@
     <legend>Billing Information</legend>
     
     <p class="checkbox">
-      <input type="checkbox" name="order[billing_is_same]" value="1" id="billing_is_same" value="<?= $order->g("billing_is_same") ?>">
+      <input type="checkbox" name="order[billing_is_same]" value="1" id="billing_is_same" <?= $order->g("billing_is_same") == "1" ? "checked" : "" ?>>
       <label for="billing_is_same">
         My billing information is the same as my shipping information
       </label>
