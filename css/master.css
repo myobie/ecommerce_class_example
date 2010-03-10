@@ -147,6 +147,11 @@ h1 {
   display: block;
 }
 
+h2 a.checkout {
+  display: block;
+  float: right;
+}
+
 #cart table {
   width: 100%;
 }

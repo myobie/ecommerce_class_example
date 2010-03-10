@@ -43,6 +43,36 @@ class Cart extends GenericModel
     return "$" . number_format($this->total(), 2, ".", ",");
   }
   
+  function tax()
+  {
+    return $this->total() * 0.05;
+  }
+  
+  function tax_formatted()
+  {
+    return "$" . number_format($this->tax(), 2, ".", ",");
+  }
+  
+  function shipping()
+  {
+    return 5.00; // flat rate of 5 dollars
+  }
+  
+  function shipping_formatted()
+  {
+    return "$" . number_format($this->shipping(), 2, ".", ",");
+  }
+  
+  function final_total()
+  {
+    return $this->shipping() + $this->tax() + $this->total(); // hard coded tax number
+  }
+  
+  function final_total_formatted()
+  {
+    return "$" . number_format($this->final_total(), 2, ".", ",");
+  }
+  
   function add($variant)
   {
     $cart_item = $this->cart_items(array("where" => array("variant_id = ?", $variant->id())));

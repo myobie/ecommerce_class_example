@@ -27,7 +27,7 @@
             <? } ?>
           </table>
           
-          <p><a href="/cart/">Edit cart</a></p>
+          <p><a href="/cart/">Edit</a> or <a href="/checkout/">Checkout</a></p>
         </div>
       </div>
     </div>

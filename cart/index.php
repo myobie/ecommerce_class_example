@@ -13,7 +13,10 @@ include "../app/includes/header.php";
 
 <? if (count($cart_items) > 0) { ?>
   
-  <h2>Your Cart</h2>
+  <h2>
+    Your Cart
+    <a href="/checkout/" class="checkout">Checkout</a>
+  </h2>
   
   <form action="/cart/update.php" method="post" id="cart">
     <table cellpadding="0" cellspacing="0" border="0">

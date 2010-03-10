@@ -2,6 +2,7 @@
 
 $dir = dirname(__FILE__);
 require_once "$dir/../generic/model.php";
+require_once "$dir/transaction.php";
 
 class Order extends GenericModel
 {
@@ -20,8 +21,18 @@ class Order extends GenericModel
     "country" => "string",
     "phone" => "string",
     "shipped_at" => "datetime",
-    "shipping_tracking_number" => "string"
+    "shipping_tracking_number" => "string",
+    "transaction_key" => "string"
   );
+  public static $virtual_fields = array(
+    "first_name" => null,
+    "last_name" => null,
+    "billing_is_same" => false,
+    "billing_info" => array(),
+    "card" => array()
+  );
+  
+  public $transaction_error = null;
   
   function __construct($hash = array())
   {
@@ -36,6 +47,31 @@ class Order extends GenericModel
   function order_items($hash = array())
   {
     return $this->has_many("OrderItem", $hash);
+  }
+  
+  function process_checkout()
+  {
+    // TEMP: just for testing
+    $this->update(array(
+      "card" => array(
+        "number" => "4111 1111 1111 1111",
+        "security_code" => "123",
+        "month" => "1",
+        "year" => "2012"
+      )
+    ));
+    
+    $transaction = new Transaction($this->g("card"));
+    
+    $success = $transaction->authorize();
+    
+    if ($success)
+    {
+      $this->update(array("transaction_key" => $transaction->key));
+      $this->save();
+    } else {
+      $this->transaction_error = $transaction->error_message;
+    }
   }
   
 }

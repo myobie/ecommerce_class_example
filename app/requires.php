@@ -16,6 +16,8 @@ require_once "models/size.php";
 require_once "models/users.php";
 require_once "models/variant.php";
 
+require_once "models/transaction.php";
+
 require_once "helpers/request.php";
 
 ?>
