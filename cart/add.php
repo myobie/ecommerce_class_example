@@ -57,7 +57,7 @@ $variants = mysqli_result_to_array($result);
 $variant = $variants[0];
 $variant_id = $variant["id"];
 
-$cart_item_result = $m->query("SELECT * FROM cart_items WHERE variant_id = '$variant_id'");
+$cart_item_result = $m->query("SELECT * FROM cart_items WHERE variant_id = '$variant_id' AND cart_id = '$cart_id'");
 $cart_items = mysqli_result_to_array($cart_item_result);
 $cart_item = $cart_items[0];
 
