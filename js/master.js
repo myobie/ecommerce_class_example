@@ -32,4 +32,12 @@ $(function() {
     toggle_billing_info.call($("#billing_is_same")[0]);
   }
   
+  // --- disable purchase button on submit ---
+  
+  if ($("#checkout").length > 0) {
+    $("#checkout").submit(function() {
+      $(this).find("button").text("Processing transaction...").attr("disabled", true);
+    });
+  }
+  
 });
