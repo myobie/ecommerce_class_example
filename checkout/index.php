@@ -7,7 +7,7 @@ $db = new DB();
 $cart = find_or_create_cart();
 $cart_items = $cart->cart_items();
 
-$order = new Order();
+$order = new Order(array("billing_is_same" => "1"));
 
 include "../app/includes/header.php";
 

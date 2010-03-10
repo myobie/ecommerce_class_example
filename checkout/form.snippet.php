@@ -136,7 +136,7 @@
   <div id="checkout-total">
     <h3>Cart recap</h3>
     
-    <table cellpadding="0" cellspacing="0" border="0">
+    <table cellpadding="0" cellspacing="0" border="0" id="cart-recap">
       <thead>
         <tr>
           <th>Photo</th>
