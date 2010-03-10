@@ -59,6 +59,16 @@ class Order extends GenericModel
     return $this->has_many("OrderItem", $hash);
   }
   
+  function total()
+  {
+    return $this->g("total");
+  }
+  
+  function total_formatted()
+  {
+    return "$" . number_format($this->final_total(), 2, ".", ",");
+  }
+  
   function before_save()
   {
     $first_name = $this->g("first_name");
@@ -111,7 +121,7 @@ class Order extends GenericModel
     
     $transaction = new Transaction($this->g("card"));
     
-    $transaction_success = $transaction->authorize();
+    $transaction_success = $transaction->purchase($this->total());
     
     if ($transaction_success)
     {
@@ -130,6 +140,29 @@ class Order extends GenericModel
     $save_success = $this->save();
     
     return $transaction_success && $save_success;
+  }
+  
+  function copy($cart)
+  {
+    $cart_items = $cart->cart_items();
+    
+    foreach ($cart_items as $cart_item) {
+      
+      $variant = $cart_item->variant();
+      $product = $variant->product();
+      
+      $order_item = new OrderItem($cart_item->attributes());
+      $order_item->update(array(
+        "price_per_variant" => $variant->price() * 100,
+        "name" => $product->g("name"),
+        "color_id" => $variant->g("color_id"),
+        "size_id" => $variant->g("size_id"),
+        "photo_id" => $product->photo($variant->g("color_id"))->id(),
+        "subtotal" => $cart_item->subtotal() * 100
+      ));
+      $order_item->save();
+      
+    }
   }
   
 }

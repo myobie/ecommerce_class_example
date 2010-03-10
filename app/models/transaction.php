@@ -24,40 +24,41 @@ class Transaction
     $this->info = $info;
     // remove any non-numbers
     $this->info["number"] = preg_replace('/[^0-9]/', '', $this->info["number"]);
+    
+    $this->info["short_year"] = substr($this->info["year"], -2, 2);
+    
+    if (strlen($this->info["month"]) == 1)
+      $this->info["month"] = "0" . $this->info["month"];
   }
   
-  public function capture()
+  public function purchase($amount)
   {
     if ($this->validate())
     {
-      // TODO: actually hit the api to capture this transaction
-      // TODO: also record the transaction error, if there is one
-      
-      return true;
+      $dir = dirname(__FILE__);
+      require_once "$dir/../lib/braintree/_environment.php";
+
+      $result = Braintree_Transaction::sale(array(
+          'amount' => number_format($amount / 100, 2, ".", ""),
+          'creditCard' => array(
+              'number' => $this->info["number"],
+              'expirationDate' => $this->info["month"] . "/" . $this->info["short_year"],
+              'cvv' => $this->info["security_code"]
+          ),
+          'options' => array('submitForSettlement' => true)
+      ));
+
+      if ($result->success)
+      {
+        $this->key = $result->transaction->id;
+        return true;
+      } else {
+        $this->error_message = "Credit card transaction failed.";
+        return false;
+      }
     } else {
       return false;
     }
-  }
-  
-  public function authorize()
-  {
-    if ($this->validate())
-    {
-      // TODO: actually hit the api to authorize this transaction
-      // TODO: also record the transaction error, if there is one
-      
-      $this->key = "1234xyz";
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
-  public function purchase()
-  {
-    $r = $this->authorize();
-    $r = $r && $this->capture();
-    return $r;
   }
   
   public function card_type()

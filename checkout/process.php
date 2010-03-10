@@ -7,10 +7,16 @@ $db = new DB();
 $cart = find_or_create_cart();
 
 $order = new Order($_POST["order"]);
+$order->update(array(
+  "total" => $cart->final_total(),
+  "shipping_total" => $cart->shipping(),
+  "tax_total" => $cart->tax()
+));
 $success = $order->process_checkout();
 
 if ($success)
 {
+  $order->copy($cart);
   $cart->destroy();
   header('Location: /checkout/thank_you.php');
 } else {
