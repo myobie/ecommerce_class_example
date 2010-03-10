@@ -8,9 +8,9 @@ $cart = find_or_create_cart();
 
 $order = new Order($_POST["order"]);
 $order->update(array(
-  "total" => $cart->final_total(),
-  "shipping_total" => $cart->shipping(),
-  "tax_total" => $cart->tax()
+  "total" => $cart->final_total() * 100,
+  "shipping_total" => $cart->shipping() * 100,
+  "tax_total" => $cart->tax() * 100
 ));
 $success = $order->process_checkout();
 

@@ -158,7 +158,8 @@ class Order extends GenericModel
         "color_id" => $variant->g("color_id"),
         "size_id" => $variant->g("size_id"),
         "photo_id" => $product->photo($variant->g("color_id"))->id(),
-        "subtotal" => $cart_item->subtotal() * 100
+        "subtotal" => $cart_item->subtotal() * 100,
+        "order_id" => $this->id()
       ));
       $order_item->save();
       
