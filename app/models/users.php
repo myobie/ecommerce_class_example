@@ -16,7 +16,7 @@ class User extends GenericModel
     "state" => "string",
     "postal_code" => "string",
     "country" => "string",
-    "phone" => "string(25)"
+    "phone" => "string"
   );
   
   function __construct($hash = array())

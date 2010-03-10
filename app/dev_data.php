@@ -91,7 +91,7 @@ Categorization::create(array(
 
 $colors = Color::all();
 $sizes = Size::all();
-$products = array($p1, $p2);
+$products = Product::all();
 
 foreach ($products as $product) {
   foreach ($colors as $color) {
@@ -103,7 +103,7 @@ foreach ($products as $product) {
         "product_id" => $product->id(),
         "color_id" => $color->id(),
         "size_id" => $size->id(),
-        "sku" => $product->get_attribute("sku") . "$size->short_name-$color_lowercase",
+        "sku" => $product->g("base_sku") . $size->g("short_name") . "-$color_lowercase",
         "quantity" => 100
       ));
       

@@ -245,7 +245,12 @@ abstract class GenericModel
     $hash = array_intersect_key($hash, $all_fields);
     
     foreach ($hash as $key => $value) {
-      $this->values[$key] = $value;
+      if ($klass::$fields[$key] != "string" && $value === "")
+      {
+        unset($hash[$key]);
+      } else {
+        $this->values[$key] = $value;
+      }
     }
     
     $this->changed = array_merge($this->changed, 

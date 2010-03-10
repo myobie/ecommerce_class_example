@@ -9,7 +9,7 @@ class Size extends GenericModel
   public static $table_name = "sizes";
   public static $fields = array(
     "name" => "string",
-    "short_name" => "string(5)"
+    "short_name" => "string"
   );
   
   function __construct($hash = array())

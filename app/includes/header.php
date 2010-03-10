@@ -13,16 +13,14 @@
       </ul>
       <div id="minicart">
         <h2>Cart Summary</h2>
-        <p><?= $cart->quantity() ?> items in your cart. <strong>Total: <?= $cart->total_formatted() ?></strong></p>
+        <p><?= $cart_quantity ?> items in your cart. <strong>Total: $<?= number_format($cart_total / 100, 2, ".", ",") ?></strong></p>
         <div class="summary">
           <table cellpadding="0" cellspacing="0" border="0">
-            <? $cart_items = $cart->cart_items(); ?>
             <? foreach ($cart_items as $cart_item) { ?>
-              <? $variant = $cart_item->variant() ?>
               <tr>
-                <td class="quantity"><?= $cart_item->g("quantity") ?></td> 
-                <td class="description"><?= $variant->description() ?></td> 
-                <td><?= $cart_item->subtotal_formatted(); ?></td>
+                <td class="quantity"><?= $cart_item["quantity"] ?></td> 
+                <td class="description"><? // $variant->description() ?></td> 
+                <td>$<?= number_format($cart_item["quantity"] * $cart_item["price"] / 100, 2, ".", ",") ?></td>
               </tr>
             <? } ?>
           </table>

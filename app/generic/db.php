@@ -179,7 +179,15 @@ class DB
           $left = substr($where_string, 0, $pos);
           $right = substr($where_string, $pos + 1);
           
-          $where_string = $left . "'" . mysql_real_escape_string($sub) . "'" . $right;
+          if (gettype($sub) == "array")
+          {
+            $func = create_function('$a', 'return "\'" . mysql_real_escape_string($a) . "\'";');
+            $good_sub = implode(",", array_map($func, $sub));
+          } else {
+            $good_sub = "'" . mysql_real_escape_string($sub) . "'";
+          }
+          
+          $where_string = $left . $good_sub . $right;
         }
       }
       

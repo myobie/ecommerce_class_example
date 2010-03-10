@@ -1,0 +1,78 @@
+html {
+  background: #ddd;
+}
+
+body {
+  background: #fff;
+  width: 960px;
+  margin: 0 auto;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+#nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  overflow: auto;
+}
+
+#nav ul li {
+  margin: 0 20px 0 0;
+  float: left;
+}
+
+#content {
+  padding: 20px;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  margin: 0 0 1em;
+}
+
+legend {
+  color: #999;
+}
+
+form label {
+  display: block;
+}
+
+form .checkbox label,
+form .checkboxes label {
+  display: inline;
+}
+
+form input[type=text] {
+  width: 300px;
+}
+
+.variant {
+  background: #f0f0f0;
+  padding: 10px;
+  margin: 0 0 20px;
+  clear: both;
+  overflow: auto;
+}
+
+.variant p {
+  float: left;
+  margin: 0 10px 0 0;
+  width: 160px;
+}
+
+.variant p input,
+.variant p select {
+  width: 95%;
+}
+
+.variant p em {
+  font-size: 10px;
+  margin: 0;
+  color: #999;
+}
