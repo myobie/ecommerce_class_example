@@ -8,6 +8,8 @@ class DB
   public static $username = "root";
   public static $password = "";
   private $conn;
+  public $queries = array();
+  public $testing = true;
   
   
   function __construct()
@@ -134,8 +136,8 @@ class DB
   
   public function query($string)
   {
-    // echo $string;
-    // echo "\n\n";
+    if ($this->testing)
+      array_push($this->queries, $string);
     
     return mysql_query($string);
   }
