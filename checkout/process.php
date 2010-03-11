@@ -26,7 +26,7 @@ if ($cart_result->num_rows < 1)
   $_SESSION["cart_id"] = $cart_id;
 }
 
-$result = $m->query("SELECT ci.id, ci.quantity, ci.variant_id, 
+$result = $m->query("SELECT ci.id, ci.quantity, ci.variant_id, p.name,
                             v.price, p.default_price, v.color_id, v.size_id
                      FROM   cart_items ci, variants v, products p
                      WHERE  ci.variant_id = v.id
