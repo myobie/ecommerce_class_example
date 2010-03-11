@@ -74,6 +74,11 @@ fieldset.inventory tr.add td {
   background-color: #dbffda;
 }
 
+fieldset.inventory tr.add td em {
+  font-size: 12px;
+  color: #999;
+}
+
 fieldset.inventory tr.blank td {
   background: #fff;
   height: 5px;

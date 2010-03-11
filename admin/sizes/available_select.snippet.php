@@ -14,9 +14,18 @@ $sizes = Size::all(array(
 ));
 
 ?>
+
+<? if (count($sizes) > 0) { ?>
+  
 <select name="variants[new][size_id]" id="new_size_chooser">
   <option value="">Available Sizes</option>
   <? foreach ($sizes as $size) { ?>
     <option value="<?= $size->id() ?>"><?= $size->g("name") ?></option>
   <? } ?>
 </select>
+
+<? } else { ?>
+
+<em id="new_size_chooser">No available sizes.</em>
+
+<? } ?>
