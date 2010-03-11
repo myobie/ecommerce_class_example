@@ -11,6 +11,8 @@ $sizes = Size::all(array("order" => "id ASC"));
 $colors = Color::all(array("order" => "name ASC"));
 $first_color_id = $colors[0]->id(); // make sure the images line up with the select box
 
+Variant::all();
+
 include "app/includes/header.php";
 
 ?>

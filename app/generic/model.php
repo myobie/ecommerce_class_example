@@ -10,7 +10,8 @@ abstract class GenericModel
   public static $foreign_key = "";
   public static $fields = array();
   public static $virtual_fields = array();
-  private static $mass_assign = array();
+  public static $mass_assign = array();
+  private $instance_cache = array();
   private $original_values = array();
   private $values = array();
   private $changed = array();
@@ -20,6 +21,12 @@ abstract class GenericModel
   function __construct($hash = array())
   {
     $this->setup($hash);
+  }
+  
+  public static function clear_cache()
+  {
+    $klass = get_called_class();
+    Cache::clear($klass);
   }
   
   public static function all($hash = array())
@@ -57,12 +64,19 @@ abstract class GenericModel
     $models = array();
     
     foreach ($result as $record) {
-      $model = new $klass;
-      $model->setup($record);
-      $model->saved = true;
-      $model->persisted = true;
-      $model->original_values = $model->values;
-      $model->changed = array();
+      $model = Cache::get($klass, $record["id"]);
+      
+      if (!$model) {
+        $model = new $klass;
+        $model->setup($record);
+        $model->saved = true;
+        $model->persisted = true;
+        $model->original_values = $model->values;
+        $model->changed = array();
+        
+        Cache::set($klass, $record["id"], $model);
+      }
+      
       array_push($models, $model);
     }
     
@@ -89,9 +103,10 @@ abstract class GenericModel
   {
     $klass = get_called_class();
     
-    $hash = array("where" => array("id = ?", $id));
+    $result = Cache::get($klass, $id);
     
-    $result = $klass::first($hash);
+    if (!$result)
+      $result = $klass::first(array("where" => array("id = ?", $id)));
     
     return $result;
   }
@@ -147,6 +162,23 @@ abstract class GenericModel
   public function id()
   {
     return $this->original_values["id"];
+  }
+  
+  public function reload()
+  {
+    global $db;
+    $klass = get_called_class();
+    
+    Cache::clear($klass, $this->id());
+    $this->instance_cache = array();
+    
+    $from_db = $klass::get($this->id());
+    
+    $this->setup($from_db->attributes());
+    $this->saved = true;
+    $this->persisted = true;
+    $this->original_values = $this->values;
+    $this->changed = array();
   }
   
   public function save()
@@ -297,10 +329,18 @@ abstract class GenericModel
     return $hash;
   }
   
-  public function has_many($model, $hash = array())
+  public function has_many($model, $hash = array(), $reload = false)
   {
-    $hash = $this->has_many_where($hash);
-    return $model::all($hash);
+    $result = $this->instance_cache[$model];
+    
+    if (gettype($result) == "NULL" || $reload)
+    {
+      $hash = $this->has_many_where($hash);
+      $result = $model::all($hash);
+      $this->instance_cache[$model] = $result;
+    }
+    
+    return $result;
   }
   
   public function belongs_to($model)

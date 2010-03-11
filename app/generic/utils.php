@@ -1,5 +1,76 @@
 <?
 
+class Cache
+{
+  private static $inst = null;
+  private $cache = array();
+  
+  public static function getInstance() 
+  { 
+      if (!self::$inst) 
+        self::$inst = new Cache(); 
+      
+      return self::$inst;
+  }
+  
+  static function get($model, $key)
+  {
+    // var_dump($model);
+    // var_dump($key);
+    // 
+    $i = self::getInstance();
+    return $i->g($model, $key);
+  }
+  
+  static function set($model, $key, $value)
+  {
+    $i = self::getInstance();
+    $i->s($model, $key, $value);
+  }
+  
+  static function clear($model, $key = null)
+  {
+    $i = self::getInstance();
+    $i->c($model, $key);
+  }
+  
+  function g($model, $key)
+  {
+    if (gettype($this->cache[$model]) == "NULL")
+      $this->cache[$model] = array();
+    
+    return $this->cache[$model][$key];
+  }
+  
+  function s($model, $key, $value)
+  {
+    if (gettype($this->cache[$model]) == "NULL")
+      $this->cache[$model] = array();
+    
+    $this->cache[$model][$key] = $value;
+  }
+  
+  function c($model, $key = null)
+  {
+    if (gettype($this->cache[$model]) == "NULL" || gettype($key) == "NULL") {
+      $this->cache[$model] = array();
+    } else {
+      unset($this->cache[$model][$key]);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /**
   * Translates a camel case string into a string with underscores (e.g. firstName -&gt; first_name)
   * @param    string   $str    String in camel case format
