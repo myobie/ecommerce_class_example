@@ -17,6 +17,7 @@ abstract class GenericModel
   private $changed = array();
   private $saved = false;
   private $persisted = false;
+  private $belongs_tos = array();
   
   function __construct($hash = array())
   {
@@ -345,6 +346,8 @@ abstract class GenericModel
   
   public function belongs_to($model)
   {
+    array_push($this->belongs_tos, $model);
+    
     $key = to_underscore($model);
     return $model::get($this->get_attribute($key."_id"));
   }
