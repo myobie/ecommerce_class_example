@@ -66,13 +66,12 @@ foreach ($_POST["variants"] as $id => $data) {
   if ($variant)
   {
     $variant->update($data);
-  } else {
+    $variant->save();
+    array_push($variant_ids_from_form, $variant->id());
+  } 
+  /*else {
     $variant = new Variant($data);
-  }
-  
-  $variant->save();
-  
-  array_push($variant_ids_from_form, $variant->id());
+  }*/
   
 }
 

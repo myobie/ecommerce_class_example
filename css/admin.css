@@ -52,6 +52,46 @@ form input[type=text] {
   width: 300px;
 }
 
+fieldset.inventory table {
+  width: 100%;
+}
+
+fieldset.inventory td,
+fieldset.inventory th {
+  padding: 5px;
+  width: 20%;
+}
+
+fieldset.inventory td {
+  border-top: 1px solid #ddd;
+}
+
+fieldset.inventory tr:nth-child(odd) td {
+  background: #eee;
+}
+
+fieldset.inventory tr.add td {
+  background-color: #dbffda;
+}
+
+fieldset.inventory tr.blank td {
+  background: #fff;
+  height: 5px;
+  font-size: 1px;
+}
+
+fieldset.inventory tr td.remove {
+  font-size: 10px;
+}
+
+fieldset.inventory input {
+  width: 97%;
+}
+
+fieldset.inventory select {
+  width: 100%;
+}
+
 .variant {
   background: #f0f0f0;
   padding: 10px;

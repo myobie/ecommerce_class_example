@@ -30,15 +30,22 @@ abstract class GenericModel
     if (empty($hash["fields"]))
     {
       $fields = array_keys($klass::$fields);
+      array_unshift($fields, "id");
     } else {
       $fields = $hash["fields"];
     }
     
-    array_unshift($fields, "id");
+    if (empty($hash["table"]))
+    {
+      $table = $klass::$table_name;
+    } else {
+      $table = $hash["table"];
+    }
+    
     array_unique($fields);
     
     $result = $db->select(array(
-      "table" => $klass::$table_name,
+      "table" => $table,
       "fields" => $fields,
       "where" => $hash["where"],
       "order" => $hash["order"],

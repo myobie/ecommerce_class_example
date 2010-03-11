@@ -13,7 +13,9 @@ $categories = Category::all(array("order" => "name ASC"));
 $colors = Color::all(array("order" => "name ASC"));
 $sizes = Size::all(array("order" => "id ASC"));
 
-$variants = $product->variants();
+$variants = $product->variants(array(
+  "order" => "color_id ASC, size_id ASC, sku ASC"
+));
 
 $product_category_names = $product->category_names();
 
@@ -84,57 +86,54 @@ include "../../app/includes/admin/header.php";
   <fieldset class="inventory">
     <legend>Inventory</legend>
     
-    <? foreach ($variants as $variant) { ?>
-      <div class="variant">
-        
-        <p class="color">
-          <label>Color:</label>
-          <select name="variants[<?= $variant->id() ?>][color_id]">
-            <? foreach ($colors as $color) { ?>
-              <option value="<?= $color->id() ?>" <?= $color->id() == $variant->g("color_id") ? "selected" : "" ?>>
-                <?= $color->g("name") ?>
-              </option>
-            <? } ?>
-          </select>
-        </p>
-        
-        <p class="size">
-          <label>Size:</label>
-          <select name="variants[<?= $variant->id() ?>][size_id]">
-            <? foreach ($sizes as $size) { ?>
-              <option value="<?= $size->id() ?>" <?= $size->id() == $variant->g("size_id") ? "selected" : "" ?>>
-                <?= $size->g("name") ?>
-              </option>
-            <? } ?>
-          </select>
-        </p>
-        
-        <p class="price">
-          <label>Price:</label>
-          <input type="text" 
-                 name="variants[<?= $variant->id() ?>][price]"
-                 value="<?= $variant->g("price") ?>"
-                 placeholder="<?= $product->g("default_price") ?>">
-          <em>Leave blank to use default price</em>
-        </p>
-        
-        <p class="sku">
-          <label>SKU:</label>
-          <input type="text" 
-                 name="variants[<?= $variant->id() ?>][sku]"
-                 value="<?= $variant->g("sku") ?>">
-          <em>Must be unique per item</em>
-        </p>
-        
-        <p class="quantity">
-          <label>Quantity:</label>
-          <input type="text" 
-                 name="variants[<?= $variant->id() ?>][quantity]"
-                 value="<?= $variant->g("quantity") ?>">
-        </p>
-        
-      </div>
-    <? } ?>
+    <table cellpadding="0" cellspacing="0" border="0" id="variants">
+      <thead>
+        <tr>
+          <th>Color</th>
+          <th>Size</th>
+          <th>Price</th>
+          <th>SKU</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="add">
+          <td>
+            <select name="variants[new][color_id]" id="new_color_chooser">
+              <option value="">Available Colors</option>
+              <? foreach ($colors as $color) { ?>
+                <option value="<?= $color->id() ?>"><?= $color->g("name") ?></option>
+              <? } ?>
+            </select>
+          </td>
+          <td>
+            <? include "../sizes/available_select.snippet.php" ?>
+          </td>
+          <td>
+            <input type="text" 
+                   id = "new_price"
+                   name="variants[new][price]"
+                   value=""
+                   placeholder="<?= $product->g("default_price") ?>">
+          </td>
+          <td>
+            <input type="text" 
+                   name="variants[new][sku]"
+                   id="new_sku"
+                   value="<?= $product->g("base_sku") ?>">
+          </td>
+          <td>
+            <input type="text" 
+                   name="variants[new][quantity]"
+                   id="new_quantity"
+                   value="1">
+          </td>
+        </tr>
+        <? foreach ($variants as $variant) { ?>
+          <? include "../variants/table_row.snippet.php" ?>
+        <? } ?>
+      </tbody>
+    </table>
   </fieldset>
   
   <p>
